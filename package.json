@@ -1,0 +1,24 @@
+{
+  "name": "mpu6050-dmp",
+  "version": "0.0.0",
+  "description": "Read DMP positional data from the MPU6050's FIFO",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/mattcarpenter/mpu6050-dmp"
+  },
+  "keywords": [
+    "MPU6050",
+    "FIFO",
+    "DMP"
+  ],
+  "author": "Matt Carpenter",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mattcarpenter/mpu6050-dmp/issues"
+  },
+  "homepage": "https://github.com/mattcarpenter/mpu6050-dmp"
+}
