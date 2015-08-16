@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/mattcarpenter/mpu6050-dmp/issues"
   },
-  "homepage": "https://github.com/mattcarpenter/mpu6050-dmp"
+  "homepage": "https://github.com/mattcarpenter/mpu6050-dmp",
+  "dependencies": {
+    "node-gyp": "~2.0.2"
+  }
 }
