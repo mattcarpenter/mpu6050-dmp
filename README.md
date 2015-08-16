@@ -13,14 +13,14 @@ npm install mpu6050-mpu
 ## Usage
 
 ```javascript
-var mpu = require('mpu6050-mpu');
+var mpu = require('mpu6050-dmp');
 
-mpu.initialize();
-
-setTimeout(function () {
-    console.log(mpu.getAttitude());
+if (mpu.initialize()) {
+  setInterval(function () {
     console.log(mpu.getRotation());
-}, 5);
+    console.log(mpu.getAttitude());
+  }, 10);
+}
 ```
 
 ## Credits and License

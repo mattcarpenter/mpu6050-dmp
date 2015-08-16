@@ -51,18 +51,26 @@ Handle<Value> GetRotation(const Arguments& args) {
   return scope.Close(obj);
 }
 
-void init(Handle<Object> exports) {
+Handle<Value> Init(const Arguments& args) {
+  HandleScope scope;
+
   initMPU();
 
   if (pthread_create(&readThread, NULL, readFromFIFO, &data_out)) {
     fprintf(stderr, "Error creating thread\n");
-    return;
+    return scope.Close(False());
   }
-  
+
+  return scope.Close(True());
+}
+
+void init(Handle<Object> exports) {
   exports->Set(String::NewSymbol("getAttitude"),
     FunctionTemplate::New(GetAttitude)->GetFunction());
   exports->Set(String::NewSymbol("getRotation"),
     FunctionTemplate::New(GetRotation)->GetFunction());
+  exports->Set(String::NewSymbol("initialize"),
+    FunctionTemplate::New(Init)->GetFunction());
 }
 
 void initMPU() {
