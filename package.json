@@ -1,8 +1,8 @@
 {
   "name": "mpu6050-dmp",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Quick and dirty Node.js module for reading DMP-processed yaw/pitch/roll and rotation values from an MPU6050",
-  "main": "index.js",
+  "main": "./build/Release/binding.node",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
