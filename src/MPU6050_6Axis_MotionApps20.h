@@ -33,6 +33,10 @@ THE SOFTWARE.
 #ifndef _MPU6050_6AXIS_MOTIONAPPS20_H_
 #define _MPU6050_6AXIS_MOTIONAPPS20_H_
 
+#include <stdio.h>
+#include <math.h>
+#include <cstring>
+#include <unistd.h>
 #include "I2Cdev.h"
 #include "helper_3dmath.h"
 
@@ -56,18 +60,10 @@ THE SOFTWARE.
 // after moving string constants to flash memory storage using the F()
 // compiler macro (Arduino IDE 1.0+ required).
 
-//#define DEBUG
-#ifdef DEBUG
-    #define DEBUG_PRINT(x) Serial.print(x)
-    #define DEBUG_PRINTF(x, y) Serial.print(x, y)
-    #define DEBUG_PRINTLN(x) Serial.println(x)
-    #define DEBUG_PRINTLNF(x, y) Serial.println(x, y)
-#else
-    #define DEBUG_PRINT(x)
-    #define DEBUG_PRINTF(x, y)
-    #define DEBUG_PRINTLN(x)
-    #define DEBUG_PRINTLNF(x, y)
-#endif
+#define DEBUG_PRINT(x)
+#define DEBUG_PRINTF(x, y)
+#define DEBUG_PRINTLN(x)
+#define DEBUG_PRINTLNF(x, y)
 
 #define MPU6050_DMP_CODE_SIZE       1929    // dmpMemory[]
 #define MPU6050_DMP_CONFIG_SIZE     192     // dmpConfig[]
