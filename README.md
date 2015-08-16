@@ -1,8 +1,8 @@
 # MPU6050-dmp
 
-Quick and dirty Node.js module for reading DMP-processed yaw/pitch/roll and rotation data from an MPU6050.
+Quick and dirty Node.js module for reading DMP-processed yaw/pitch/roll and rotation data from an MPU6050. 
 
-This module has been developed and tested on a BeagleBone Black but will likely work on a Raspberry Pi as well with a slight modification (detailed below).
+This module has been developed and tested on a BeagleBone Black but should also work on a Raspberry Pi as well.
 
 ## Install
 
@@ -22,6 +22,10 @@ if (mpu.initialize()) {
   }, 10);
 }
 ```
+
+## Selecting an i2c device
+
+This module is hard-coded to open the i2c device located at `/dev/i2c-1`. To change this, you must simply do a search and replace in `src/I2Cdev.cpp`. I may go back and make this configurable at runtime, but I'd like to expose some of the other MPU and DMP configuration options via the module exports and intialization routine first. 
 
 ## Credits and License
 
