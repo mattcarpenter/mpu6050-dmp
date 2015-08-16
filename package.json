@@ -1,7 +1,7 @@
 {
   "name": "mpu6050-dmp",
   "version": "0.0.0",
-  "description": "Read DMP positional data from the MPU6050's FIFO",
+  "description": "Quick and dirty Node.js module for reading DMP-processed yaw/pitch/roll and rotation values from an MPU6050",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
