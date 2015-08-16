@@ -7,7 +7,7 @@ This module has been developed and tested on a BeagleBone Black but should also 
 ## Install
 
 ```
-npm install mpu6050-mpu
+npm install mpu6050-dmp
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ if (mpu.initialize()) {
 }
 ```
 
-## Selecting an i2c device
+## Selecting an I2c device
 
 This module is hard-coded to open the i2c device located at `/dev/i2c-1`. To change this, you must simply do a search and replace in `src/I2Cdev.cpp`. I may go back and make this configurable at runtime, but I'd like to expose some of the other MPU and DMP configuration options via the module exports and intialization routine first. 
 
