@@ -14,7 +14,7 @@
     "MPU6050",
     "FIFO",
     "DMP",
-    "BeagleBone"
+    "BeagleBone",
     "IMU"
   ],
   "author": "Matt Carpenter",
