@@ -1,5 +1,6 @@
 #include "binding.h"
 
+using v8::FunctionTemplate;
 using namespace std::chrono;
 
 pthread_t readThread;
@@ -27,7 +28,7 @@ float data_out[6];
 void *readFromFIFO(void *ypr_void_ptr); 
 void initMPU();
 
-NAN_METHOD(getAttitude) {
+NAN_METHOD(GetAttitude) {
   v8::Local<v8::Object> obj = Nan::New<v8::Object>();
   Nan::Set(obj, Nan::New("roll").ToLocalChecked(), Nan::New(data_out[1]));
   Nan::Set(obj, Nan::New("pitch").ToLocalChecked(), Nan::New(data_out[2]));
@@ -35,7 +36,7 @@ NAN_METHOD(getAttitude) {
   info.GetReturnValue().Set(obj);
 }
 
-NAN_METHOD(getRotation) {
+NAN_METHOD(GetRotation) {
   v8::Local<v8::Object> obj = Nan::New<v8::Object>();
   Nan::Set(obj, Nan::New("roll").ToLocalChecked(), Nan::New(data_out[3]));
   Nan::Set(obj, Nan::New("pitch").ToLocalChecked(), Nan::New(data_out[4]));
@@ -43,15 +44,15 @@ NAN_METHOD(getRotation) {
   info.GetReturnValue().Set(obj);
 }
 
-NAN_METHOD(initialize) {
+NAN_METHOD(Initialize) {
   initMPU();
 
   if (pthread_create(&readThread, NULL, readFromFIFO, &data_out)) {
     fprintf(stderr, "Error creating thread\n");
     info.GetReturnValue().Set(false);
+  } else {
+    info.GetReturnValue().Set(true);
   }
-
-  info.GetReturnValue().Set(true);
 }
 
 void initMPU() {
@@ -150,3 +151,14 @@ void *readFromFIFO(void *ypr_void_ptr) {
 
   return NULL;
 }
+
+NAN_MODULE_INIT(InitAll) {
+  Nan::Set(target, Nan::New("getAttitude").ToLocalChecked(),
+    Nan::GetFunction(Nan::New<FunctionTemplate>(GetAttitude)).ToLocalChecked());
+  Nan::Set(target, Nan::New("getRotation").ToLocalChecked(),
+    Nan::GetFunction(Nan::New<FunctionTemplate>(GetRotation)).ToLocalChecked());
+  Nan::Set(target, Nan::New("initialize").ToLocalChecked(),
+    Nan::GetFunction(Nan::New<FunctionTemplate>(Initialize)).ToLocalChecked());
+}
+
+NODE_MODULE(binding, InitAll)
