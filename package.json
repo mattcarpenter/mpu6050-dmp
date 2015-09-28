@@ -4,7 +4,9 @@
   "description": "Quick and dirty Node.js module for reading DMP-processed yaw/pitch/roll and rotation values from an MPU6050",
   "main": "./build/Release/binding.node",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "configure": "node-gyp configure",
+    "build": "node-gyp build"
   },
   "repository": {
     "type": "git",
@@ -24,6 +26,7 @@
   },
   "homepage": "https://github.com/mattcarpenter/mpu6050-dmp",
   "dependencies": {
+    "nan": "^2.0.9",
     "node-gyp": "~2.0.2"
   }
 }
