@@ -3,31 +3,6 @@
 using v8::FunctionTemplate;
 using namespace std::chrono;
 
-pthread_t readThread;
-MPU6050 mpu;
-
-// MPU control/status vars
-bool dmpReady = false;  // set true if DMP init was successful
-uint8_t mpuIntStatus;   // holds actual interrupt status byte from MPU
-uint8_t devStatus;      // return status after each device operation (0 = success, !0 = error)
-uint16_t packetSize;    // expected DMP packet size (default is 42 bytes)
-uint16_t fifoCount;     // count of all bytes currently in FIFO
-uint8_t fifoBuffer[64]; // FIFO storage buffer
-
-// orientation/motion vars
-Quaternion q;           // [w, x, y, z]         quaternion container
-VectorInt16 aa;         // [x, y, z]            accel sensor measurements
-VectorInt16 aaReal;     // [x, y, z]            gravity-free accel sensor measurements
-VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measurements
-VectorFloat gravity;    // [x, y, z]            gravity vector
-float euler[3];         // [psi, theta, phi]    Euler angle container
-float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
-
-float data_out[6];
-
-void *readFromFIFO(void *ypr_void_ptr); 
-void initMPU();
-
 NAN_METHOD(GetAttitude) {
   v8::Local<v8::Object> obj = Nan::New<v8::Object>();
   Nan::Set(obj, Nan::New("roll").ToLocalChecked(), Nan::New(data_out[1]));
@@ -45,7 +20,10 @@ NAN_METHOD(GetRotation) {
 }
 
 NAN_METHOD(Initialize) {
-  initMPU();
+  if (!initMPU()) {
+    info.GetReturnValue().Set(false);
+    return;
+  }
 
   if (pthread_create(&readThread, NULL, readFromFIFO, &data_out)) {
     fprintf(stderr, "Error creating thread\n");
@@ -55,7 +33,7 @@ NAN_METHOD(Initialize) {
   }
 }
 
-void initMPU() {
+bool initMPU() {
   // initialize device
   printf("Initializing I2C devices...\n");
   mpu.initialize();
@@ -84,14 +62,16 @@ void initMPU() {
  
     // get expected DMP packet size for later comparison
     packetSize = mpu.dmpGetFIFOPacketSize();
+
+    return true;
   } else {
     // ERROR!
     // 1 = initial memory load failed
     // 2 = DMP configuration updates failed
     // (if it's going to break, usually the code will be 1)
     printf("DMP Initialization failed (code %d)\n", devStatus);
+    return false;
   }
-
 }
 
 void *readFromFIFO(void *ypr_void_ptr) {
