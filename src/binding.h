@@ -6,6 +6,8 @@
 
 NAN_METHOD(getAttitude);
 NAN_METHOD(getRotation);
+NAN_METHOD(getRotation);
+NAN_METHOD(getQuaternion);
 NAN_METHOD(initialize);
 
 pthread_t readThread;
@@ -28,7 +30,7 @@ VectorFloat gravity;    // [x, y, z]            gravity vector
 float euler[3];         // [psi, theta, phi]    Euler angle container
 float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
 
-float data_out[6];
+float data_out[10];
 
 void *readFromFIFO(void *ypr_void_ptr); 
 bool initMPU();
