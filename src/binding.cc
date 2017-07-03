@@ -19,6 +19,15 @@ NAN_METHOD(GetRotation) {
   info.GetReturnValue().Set(obj);
 }
 
+NAN_METHOD(GetQuaternion) {
+  v8::Local<v8::Object> obj = Nan::New<v8::Object>();
+  Nan::Set(obj, Nan::New("w").ToLocalChecked(), Nan::New(data_out[6]));
+  Nan::Set(obj, Nan::New("x").ToLocalChecked(), Nan::New(data_out[7]));
+  Nan::Set(obj, Nan::New("y").ToLocalChecked(), Nan::New(data_out[8]));
+  Nan::Set(obj, Nan::New("z").ToLocalChecked(), Nan::New(data_out[9]));
+  info.GetReturnValue().Set(obj);
+}
+
 NAN_METHOD(Initialize) {
   if (!initMPU()) {
     info.GetReturnValue().Set(false);
@@ -101,6 +110,11 @@ void *readFromFIFO(void *ypr_void_ptr) {
 
       // display Euler angles in degrees
       mpu.dmpGetQuaternion(&q, fifoBuffer);
+			// expose quaternion values
+			ypr_ptr[6] = q.x;
+			ypr_ptr[7] = q.y;
+			ypr_ptr[8] = q.w;
+			ypr_ptr[9] = q.z;
       mpu.dmpGetGravity(&gravity, &q);
       mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
       //printf("ypr  %7.2f %7.2f %7.2f\n", ypr[0] * 180/M_PI, ypr[1] * 180/M_PI, ypr[2] * 180/M_PI);
@@ -137,6 +151,8 @@ NAN_MODULE_INIT(InitAll) {
     Nan::GetFunction(Nan::New<FunctionTemplate>(GetAttitude)).ToLocalChecked());
   Nan::Set(target, Nan::New("getRotation").ToLocalChecked(),
     Nan::GetFunction(Nan::New<FunctionTemplate>(GetRotation)).ToLocalChecked());
+  Nan::Set(target, Nan::New("getQuaternion").ToLocalChecked(),
+    Nan::GetFunction(Nan::New<FunctionTemplate>(GetQuaternion)).ToLocalChecked());
   Nan::Set(target, Nan::New("initialize").ToLocalChecked(),
     Nan::GetFunction(Nan::New<FunctionTemplate>(Initialize)).ToLocalChecked());
 }
